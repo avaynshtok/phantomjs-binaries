@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Anton Vaynshtok"]
   s.email       = ["avaynshtok@gmail.com"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{phantom.js binaries wrapped as a ruby gem}
+  s.description = %q{This package prevents you from having to install phantom.js independently outside your app.}
 
   s.rubyforge_project = "phantomjs-binaries"
 
@@ -20,5 +20,5 @@ Gem::Specification.new do |s|
 
   # specify any dependencies here; for example:
   # s.add_development_dependency "rspec"
-  # s.add_runtime_dependency "rest-client"
+  s.add_runtime_dependency "sys-uname", "0.9.0"
 end

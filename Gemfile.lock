@@ -1,0 +1,18 @@
+PATH
+  remote: .
+  specs:
+    phantomjs-binaries (1.5.0)
+      sys-uname (= 0.9.0)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    ffi (1.0.11)
+    sys-uname (0.9.0)
+      ffi (>= 1.0.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  phantomjs-binaries!
