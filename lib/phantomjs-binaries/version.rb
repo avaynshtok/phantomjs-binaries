@@ -1,5 +1,5 @@
 module Phantomjs
   module Binaries
-    VERSION = "0.0.1"
+    VERSION = "1.5.0"
   end
 end

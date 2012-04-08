@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+require 'sys/uname'
+include Sys
+
+$:.push File.expand_path("../../lib", __FILE__)
+require "phantomjs-binaries/version"
+
+machine  = Uname.machine
+platform = Uname.sysname.downcase
+version  = Phantomjs::Binaries::VERSION
+platform_binary = File.expand_path(File.join(File.dirname(__FILE__), "phantomjs-#{version}-#{platform}-#{machine}"))
+exec platform_binary, *ARGV
