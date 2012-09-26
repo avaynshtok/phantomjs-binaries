@@ -33,7 +33,7 @@ ARGV.each do |arg|
     is_found = false
     PHANTOMJS_NATIVE_ARGS.each do |pna|
         if arg.start_with? pna
-            PHANTOMJS_ARGS << arg 
+            PHANTOMJS_ARGS << arg
             is_found = true
             break
         end
@@ -49,9 +49,4 @@ CASPER_COMMAND << "--casper-path=#{CASPER_PATH}"
 CASPER_COMMAND << "--cli"
 CASPER_COMMAND.concat CASPER_ARGS
 
-if system(CASPER_COMMAND.join(" ")).nil?
-    puts "Fatal: Did you install phantomjs?"
-end
-
-exit $?.exitstatus
-
+exec CASPER_COMMAND.join(" ")
