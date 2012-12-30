@@ -1,84 +1,58 @@
-#!/usr/bin/env python
+#!/usr/bin/env ruby
+# Ruby Wrapper for CasperJs
+# by hannyu
 
-import json
-import os
-import subprocess
-import sys
+def resolve(file_path)
+    while File.symlink?(file_path) do
+        file_path = File.readlink(file_path)
+    end
+    file_path
+end
 
-def test_cmd(cmd):
-    try:
-        return subprocess.check_output([__file__] + cmd.split(' '))
-    except subprocess.CalledProcessError as err:
-        sys.stderr.write('FAIL: %s\n' % ' '.join(err.cmd))
-        sys.stderr.write('      %s\n' % err.output)
-        sys.exit(1)
-
-def resolve(path):
-    if os.path.islink(path):
-        path = os.path.join(os.path.dirname(path), os.readlink(path))
-        return resolve(path)
-    return path
+CASPER_PATH = File.dirname(File.dirname(File.expand_path(resolve(__FILE__))))
 
 PHANTOMJS_NATIVE_ARGS = [
-    'cookies-file',
-    'config',
-    'debug',
-    'disk-cache',
-    'ignore-ssl-errors',
-    'load-images',
-    'load-plugins',
-    'local-storage-path',
-    'local-storage-quota',
-    'local-to-remote-url-access',
-    'max-disk-cache-size',
-    'output-encoding',
-    'proxy',
-    'proxy-auth',
-    'proxy-type',
-    'remote-debugger-port',
-    'remote-debugger-autorun',
-    'script-encoding',
-    'web-security',
+    '--cookies-file',
+    '--config',
+    '--debug',
+    '--disk-cache',
+    '--ignore-ssl-errors',
+    '--load-images',
+    '--load-plugins',
+    '--local-storage-path',
+    '--local-storage-quota',
+    '--local-to-remote-url-access',
+    '--max-disk-cache-size',
+    '--output-encoding',
+    '--proxy',
+    '--proxy-auth',
+    '--proxy-type',
+    '--remote-debugger-port',
+    '--remote-debugger-autorun',
+    '--script-encoding',
+    '--web-security',
 ]
+
 CASPER_ARGS = []
-CASPER_PATH = os.path.abspath(os.path.join(os.path.dirname(resolve(__file__)), '..'))
 PHANTOMJS_ARGS = []
-SYS_ARGS = sys.argv[1:]
+ARGV.each do |arg|
+    is_found = false
+    PHANTOMJS_NATIVE_ARGS.each do |pna|
+        if arg.start_with? pna
+            PHANTOMJS_ARGS << arg
+            is_found = true
+            break
+        end
+    end
+    CASPER_ARGS << arg if not is_found
+end
 
-if len(SYS_ARGS) and SYS_ARGS[0] == '__selfcommandtest':
-    print('Starting Python executable tests...')
-    pkg_version = json.loads(open('package.json').read()).get('version')
-    scripts_path = os.path.join(CASPER_PATH, 'tests', 'commands')
-    assert(test_cmd('--help').find(pkg_version) > -1)
-    assert(test_cmd('--version').strip() == pkg_version)
-    assert(test_cmd(os.path.join(scripts_path, 'script.js')) == 'it works\n')
-    test_output = test_cmd('test --no-colors ' + os.path.join(scripts_path, 'mytest.js'))
-    assert('PASS ok1' in test_output)
-    assert('PASS ok2' in test_output)
-    assert('PASS ok3' in test_output)
-    print('Python executable tests passed.')
-    sys.exit(0)
+CASPER_COMMAND = []
+CASPER_COMMAND << (ENV["PHANTOMJS_EXECUTABLE"] || "phantomjs")
+CASPER_COMMAND.concat PHANTOMJS_ARGS
+CASPER_COMMAND << File.join(CASPER_PATH, "bin", "bootstrap.js")
+CASPER_COMMAND << "--casper-path=#{CASPER_PATH}"
+CASPER_COMMAND << "--cli"
+CASPER_COMMAND.concat CASPER_ARGS
 
-for arg in SYS_ARGS:
-    found = False
-    for native in PHANTOMJS_NATIVE_ARGS:
-        if arg.startswith('--%s' % native):
-            PHANTOMJS_ARGS.append(arg)
-            found = True
-    if not found:
-        CASPER_ARGS.append(arg)
-
-CASPER_COMMAND = os.environ.get('PHANTOMJS_EXECUTABLE', 'phantomjs').split(' ')
-CASPER_COMMAND.extend(PHANTOMJS_ARGS)
-CASPER_COMMAND.extend([
-    os.path.join(CASPER_PATH, 'bin', 'bootstrap.js'),
-    '--casper-path=%s' % CASPER_PATH,
-    '--cli'
-])
-CASPER_COMMAND.extend(CASPER_ARGS)
-
-try:
-    os.execvp(CASPER_COMMAND[0], CASPER_COMMAND)
-except OSError as err:
-    print(('Fatal: %s; did you install phantomjs?' % err))
-    sys.exit(1)
+exec CASPER_COMMAND.join(" ")
