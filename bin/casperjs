@@ -2,8 +2,14 @@
 # Ruby Wrapper for CasperJs
 # by hannyu
 
+def resolve(file_path)
+    while File.symlink?(file_path) do
+        file_path = File.readlink(file_path)
+    end
+    file_path
+end
 
-CASPER_PATH = File.dirname(File.dirname(File.expand_path(__FILE__)))
+CASPER_PATH = File.dirname(File.dirname(File.expand_path(resolve(__FILE__))))
 
 PHANTOMJS_NATIVE_ARGS = [
     '--cookies-file',
