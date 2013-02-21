@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = Phantomjs::Binaries::VERSION
   s.authors     = ["Anton Vaynshtok"]
   s.email       = ["avaynshtok@gmail.com"]
-  s.homepage    = ""
+  s.homepage    = "https://github.com/avaynshtok/phantomjs-binaries"
   s.summary     = %q{phantom.js binaries wrapped as a ruby gem}
   s.description = %q{This package prevents you from having to install phantom.js independently outside your app.}
 
