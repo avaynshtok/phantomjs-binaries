@@ -1,6 +1,6 @@
 module Phantomjs
   module Binaries
-    PHANTOM_VERSION = "1.8.1"
-    VERSION = PHANTOM_VERSION + ".4"
+    PHANTOM_VERSION = "1.8.2"
+    VERSION = PHANTOM_VERSION + ".1"
   end
 end
