@@ -4,7 +4,7 @@ require "phantomjs-binaries/version"
 
 Gem::Specification.new do |s|
   s.name        = "phantomjs-binaries"
-  s.version     = Phantomjs::Binaries::VERSION
+  s.version     = PhantomjsBinaries::VERSION
   s.authors     = ["Anton Vaynshtok"]
   s.email       = ["avaynshtok@gmail.com"]
   s.homepage    = "https://github.com/avaynshtok/phantomjs-binaries"
